@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1611313054 source:c:\users\mon pc\desktop\tp sfsd\tpsfsd\fonctions.c
+	"Fonctions.h"
+
+1611313010 c:\users\mon pc\desktop\tp sfsd\tpsfsd\fonctions.h
+	<stdio.h>
+	<stdlib.h>
+
+1611407066 source:c:\users\mon pc\desktop\tp sfsd\tpsfsd\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Fonctions.h"
+
