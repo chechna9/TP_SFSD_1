@@ -3,27 +3,33 @@
 #include <string.h>
 #define b 100
 #include "Fonctions.h"
+char *alea_chaine()//on genere des nom de 3 a 19 caracteres
+{
+    char chaine[20];
+    int a;
+    a=rand()%16+3;
 
+    char alphabet[26]="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int i;
+    for ( i=0  ; i <= a ;i++ )
+    {
+       sprintf(chaine,"%s%c",chaine,alphabet[rand()%26]);
+
+    }
+    chaine[i]='\0';
+    return chaine;
+
+}
+char Type [4][25]={"Texte imprime","Document electronique","Article","Periodique"};
+LOVbarC *Cree_Ouvrage(int n){
+
+}
 
 LOVbarC F;
 int main()
 {
-    Buffer buf1,buf2,buf3;
-    ouvrire_LOVbarC(&F,"texte.txt",'n');
-
-    affichage_entete(F);
-
-    ecrire_chaine(&F,1,"on est a bloc1");
-
-
-    insertion_nonO(&F,"on est a bloc2");
-
-    insertion_nonO(&F,"on est a bloc3");
-    affichage_entete(F);
-    affichage_bParB(F);
-    Aff_Entete(&F,1,3);
-
-    Fermer_LOVbarC(&F);
+    char *s=alea_chaine();
+    printf("%s",s);
 
 
     return 0;
