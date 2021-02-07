@@ -27,8 +27,8 @@ typedef struct Fichier_LOVbarC {
     Entete entete;
     FILE *file;
 }LOVbarC;
-//=========Machine Abstraite TLOV\C============================================================================
-/*****************les structures*********************************************************/
+//=========Machine Abstraite TOVC============================================================================
+//=================les structures====================================================/
 typedef struct Tbloc      //la structure de bloc
 {
     char chaine[Taille_Bloc];   //il s'agit d'une chaine de caractères
@@ -47,18 +47,18 @@ typedef struct  ouvrage        //structure où on récupère aussi les différents c
 } ouvrage;
 
 typedef struct Tbloc Buffer;  //le buffer où on récupère on bloc
-Buffer buf;
-typedef struct Entete_T
-{
-    int nb_bloc;
-    int dernier_pos;
 
-} Entete_T;
+typedef struct Entete_TOVC
+{
+    int nb_bloc;//nombre du bloc inserer
+    int dernier_pos;//dernier position dans le dernier bloc
+
+} Entete_TOVC;
 
 typedef struct TOVC     //structure de fichier
 {
     FILE * fichier;             //poiteur vers le fichier
-    Entete_T entete;       //l'entete de fichier
+    Entete_TOVC entete;       //l'entete de fichier
 } TOVC;
 //===========machine abstraite LOVbarC==============================
 void Aff_Entete(LOVbarC *F,int i,int val);
@@ -78,10 +78,12 @@ int entete_TOVC(TOVC F,int i);
 void Ecrire_Dir_TOVC(TOVC *F,int i,Buffer buf);
 void Lire_Dir_TOVC(TOVC F,int i,Buffer *buf);
 void ouvrire_TOVC(TOVC *F,char nom[20],char mode);
+void Fermer_TOVC(TOVC *F);
+void Alloc_Bloc_TOVC(TOVC *F);
 //==============Fonctions du TP=======================================
 void cree_livre(LOVbarC F , TOVC * F2);
 void affichage_TOVC(TOVC F);
-void Fermer_TOVC(TOVC *F);
+
 void majuscule(char nom[20]);
 //========debugging stuff=======================
 void affichage_entete(LOVbarC F);
@@ -100,6 +102,10 @@ void aleat_disponible(char *dispo[1]);
 
 //char Type [4][25]={"Texte imprime","Document electronique","Article","Periodique"};
 void Cree_Ouvrage(LOVbarC *F);
+void alea_chaine(char chaine[],int max,int min); //sup ou egale a min et strictement inf a max
+
+void remplir_ouvrage(char ouvrage[b],int cle);
+void Cree_Ouvrage2(LOVbarC *F);
 void recherche (LOVbarC *F ,int clee, int *bloc, int *pos , int *trouv);
 void insertion(LOVbarC *F );
 void modif_dispo(LOVbarC *F ,int clee , char *nv_etat[1]);

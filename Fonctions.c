@@ -100,7 +100,7 @@ void Alloc_Bloc(LOVbarC *F){//en ajoute un bloc vide a la derniere position
 
 
 }
-//=============Macihne abstraite TOVC================================
+///=============Macihne abstraite TOVC======================================
 void Aff_Entete_TOVC( TOVC *F,int i,int val){
     switch(i){
     case 1://le dernier bloc
@@ -112,11 +112,6 @@ void Aff_Entete_TOVC( TOVC *F,int i,int val){
 
     }
 }
-
-
-
-
-
 
 int entete_TOVC(TOVC F,int i){
     switch(i){
@@ -131,23 +126,22 @@ int entete_TOVC(TOVC F,int i){
     }
 }
 void Ecrire_Dir_TOVC(TOVC *F,int i,Buffer buf){
-   printf(" entrer dans l'ecriture \n");
-    fseek(F->fichier,sizeof(Entete_T)+sizeof(Buffer)*(i-1),SEEK_SET);//positionné sur le i eme bloc
-    fwrite(&buf,sizeof(Buffer),1,F->fichier);//ecriture
+    //printf("\nvaleur a ecrire %s",buf.chaine);
+    fseek(F->fichier,sizeof(Entete_TOVC)+sizeof(Tbloc)*(i-1),SEEK_SET);//positionné sur le i eme bloc
+    fwrite(&buf,sizeof(Tbloc),1,F->fichier);//ecriture
 
 }
 
 void Lire_Dir_TOVC(TOVC F,int i,Buffer *buf){
-    printf(" entrer dans l'affichage \n");
-    fseek(F.fichier,sizeof(Entete_T)+sizeof(Buffer)*(i-1),SEEK_SET);////positionné sur le i eme bloc
-    fread(buf,sizeof(Buffer),1,F.fichier);//lecture
- //printf(" la valeur lue est %s\n",*buf->chaine);
+    fseek(F.fichier,sizeof(Entete_TOVC)+sizeof(Tbloc)*(i-1),SEEK_SET);////positionné sur le i eme bloc
+    fread(buf,sizeof(Tbloc),1,F.fichier);//lecture
+    //printf("la valeur lue est %s\n",buf->chaine);
 }
 void ouvrire_TOVC(TOVC *F,char nom[20],char mode){
 
     if (mode =='A' || mode =='a'){
         F->fichier=fopen(nom,"rb+");
-        fread(&(F->entete),sizeof(Entete_T),1,F->fichier);//lecture de l'entete
+        fread(&(F->entete),sizeof(Entete_TOVC),1,F->fichier);//lecture de l'entete
     }
     else
     if (mode =='N' || mode =='n'){
@@ -157,14 +151,27 @@ void ouvrire_TOVC(TOVC *F,char nom[20],char mode){
         Aff_Entete(F,1,0);
         Aff_Entete(F,2,0);
        //ecriture d'entete
-       fwrite(&(F->entete),sizeof(Entete_T),1,F->fichier);
+        fwrite(&(F->entete),sizeof(Entete_TOVC),1,F->fichier);
        //nitialisation du Buffer_liste
-       sprintf(buf.chaine,"%s","");
-        Ecrire_Dir_TOVC(F,1,buf);
+        sprintf(buf.chaine,"");
+
+        //Ecrire_Dir_TOVC(F,1,buf);
     }
     else printf("\nErreur dans le mode d'ouverture!\n");
 
 
+}
+
+void Fermer_TOVC(TOVC *F){
+    rewind(F->fichier);
+    fwrite(&(F->entete),sizeof(Entete_TOVC),1,F->fichier);//sauvgarder l'entete
+    rewind(F->fichier);
+    fclose(F->fichier);
+}
+
+
+void Alloc_Bloc_TOVC(TOVC *F){
+    Aff_Entete_TOVC(F,1,entete_TOVC(*F,1)+1);
 }
 
 //=========================Fonctions du TP========================================
@@ -267,7 +274,7 @@ printf(" le nb de bloc est************  %d\n",nb);
 
 
 }
-void affichage_TOVC(TOVC F)
+/*void affichage_TOVC(TOVC F)
 {Buffer Tbuf;
 
 int nb_bloc =entete_TOVC(F,1);
@@ -277,13 +284,7 @@ int i;
   for(i=1;i!=nb_bloc+1;i++){Lire_Dir_TOVC(F,i,&Tbuf);
   printf(" le contenu du beffer %d est : %s\n",i,buf.chaine);
     }
-}
-void Fermer_TOVC(TOVC *F){
-    rewind(F->fichier);
-    fwrite(&(F->entete),sizeof(Entete),1,F->fichier);//sauvgarder l'entete
-    rewind(F->fichier);
-    fclose(F->fichier);
-}
+}*/
 
 
 void majuscule(char nom[20])
@@ -551,6 +552,110 @@ buf.suiv=NULL;
 
 
 Fermer_LOVbarC(F);
+}
+void alea_chaine(char chaine[],int max,int min){ //sup ou egale a min et strictement inf a max
+    char alphabet[26]="abcdefghijklmnopqrstuvwxyz";
+    strcpy(chaine,"");
+    if (max > min){
+    int nombreDeCaracteres=rand()%(max - min)+min;
+    for (int i=0;i<nombreDeCaracteres;i++){
+        chaine[i]=alphabet[rand()%26];
+    }
+    chaine[nombreDeCaracteres-1]='\0';
+    }
+    else {
+        printf("\nErreur dans les arguments max ou min");
+    }
+
+}
+void remplir_ouvrage(char ouvrage[b],int cle){
+            strcpy(ouvrage,"");
+            //insertion de la cle
+            char cle_char[4];
+            int_to_char(cle,cle_char);
+            sprintf(ouvrage,"%s%s",ouvrage,cle_char);
+
+            //insertion du titre
+            char titre[20];
+            alea_chaine(titre,20,3);
+            sprintf(ouvrage,"%s%s",ouvrage,titre);
+
+            //insertion du auteur
+            char auteur[20];
+            alea_chaine(auteur,20,3);
+            sprintf(ouvrage,"%s%s",ouvrage,auteur);
+
+            //insertion du type
+            char type[24];
+            aleat_type(type);
+            sprintf(ouvrage,"%s%s",ouvrage,type);
+
+            //insertion du champ disponible
+            char disp[1];
+            aleat_disponible(disp);
+            sprintf(ouvrage,"%s%s",ouvrage,disp);
+
+            //insertion du la cote (la meme que la cle)
+            sprintf(ouvrage,"%s%s",ouvrage,cle_char);
+
+            //insertion du reume
+            char resume[50];
+            alea_chaine(resume,15,10);
+            sprintf(ouvrage,"%s%s",ouvrage,resume);
+
+
+
+}
+
+void Cree_Ouvrage2(LOVbarC *F){
+    ouvrire_LOVbarC(F,"ouvrage.bin",'n');
+    int n=0;
+    printf("\nEntrer le nombre des ouvrages: ");
+    scanf("%d",&n);
+    if(n>0){
+        Buffer_liste buf;//buffer
+        strcpy(buf.tab,"");
+        buf.suiv=NULL;
+        int j=0,bloc=1;//indice de buf.suiv
+        Aff_Entete(F,1,bloc);
+        Aff_Entete(F,4,bloc);
+        char ouvrage[b];//variable qui va contenire l'ouvrage
+        int saturation=0;//bool qui indique l'obligation d ajouter un autre bloc
+        for (int i=0;i<n;i++){
+            remplir_ouvrage(ouvrage,i);
+            j=strlen(ouvrage)+strlen(buf.tab);
+
+            if (j<b-1){
+                if (strlen(buf.tab)>0){//pour separe les ouvrages par un slash /
+
+                    sprintf(buf.tab,"%s/",buf.tab);
+                    j++;
+                }
+                sprintf(buf.tab,"%s%s",buf.tab,ouvrage);//on ajoute l ouvrage dans le bloc
+            }else{
+                saturation=1;
+            }
+
+             if(saturation || i==n-1){
+
+                if (i==7)printf("77");
+                Ecrire_Dir_LOVbarC(F,bloc,buf);//on ecrit le bloc
+                //modification de lentete
+                Aff_Entete(F,2,entete(*F,2)+j);//incrementation du nombre de caractere inserer
+                if (i!=n-1)Alloc_Bloc(F);
+                bloc++;
+                j=0;
+                saturation=0;
+                //initialisation du buffer par l ouvrage precedent;
+                sprintf(buf.tab,ouvrage);
+                /*if (!saturation && i==n-1){//pour traiter le cas du dernier ouvrage dans un nouveau bloc
+                    Alloc_Bloc(F);
+                    Ecrire_Dir_LOVbarC(F,bloc,buf);
+                }*/
+            }
+        }
+    }
+    Fermer_LOVbarC(F);
 }
 void recherche (LOVbarC *F ,int clee, int *bloc, int *pos , int *trouv)
 { int i,k;
