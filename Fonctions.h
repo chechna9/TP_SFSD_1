@@ -3,53 +3,104 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define b 100
-
+#define b 400
+#define t 12
+#define Taille_Bloc 100
+//=======LOVbarC=================================================================
 //=======Declarations des structures===========================================
-typedef struct Tbloc{
+typedef struct Lbloc{
     char tab[b];//tableau de caractere
     int suiv;//numero du bloc suivant
-} Tbloc;
+} Lbloc;
 
-typedef struct Tbloc Buffer;//declaration du buffer
+typedef struct Lbloc Buffer_liste;//declaration du Buffer_liste
 
 typedef struct Entete{
     int tete;//adresse du premier bloc
     int nbInsert;//nombre globale des caracteres inserer
     int nbSupp;//nombre globale des caractere supprimer
+    int nb_bloc;//nombre de bloc
 }Entete;
+
 
 typedef struct Fichier_LOVbarC {
     Entete entete;
     FILE *file;
 }LOVbarC;
+//=========Machine Abstraite TLOV\C============================================================================
+/*****************les structures*********************************************************/
+typedef struct Tbloc      //la structure de bloc
+{
+    char chaine[Taille_Bloc];   //il s'agit d'une chaine de caractères
+} Tbloc;
 
-//=========Machine Abstraite===================================
 
+typedef struct  ouvrage        //structure où on récupère aussi les différents champs d'un enregistrement
+{
+    char clee [4];            //le code de livre
+    char titre [20] ;  //l'auteur_le titre_la maison d'édition
+    char auteurs [20];
+   char annee [4];
+   char dispo[1];
+   char code[4];
+   char resume [50];
+} ouvrage;
+
+typedef struct Tbloc Buffer;  //le buffer où on récupère on bloc
+Buffer buf;
+typedef struct Entete_T
+{
+    int nb_bloc;
+    int dernier_pos;
+
+} Entete_T;
+
+typedef struct TOVC     //structure de fichier
+{
+    FILE * fichier;             //poiteur vers le fichier
+    Entete_T entete;       //l'entete de fichier
+} TOVC;
+//===========machine abstraite LOVbarC==============================
 void Aff_Entete(LOVbarC *F,int i,int val);
 
 int entete(LOVbarC F,int i);
 
-void Ecrire_Dir_LOVbarC(LOVbarC *F,int i,Buffer buf);
-void Lire_Dir_LOVbarC(LOVbarC F,int i,Buffer *buf);
+void Ecrire_Dir_LOVbarC(LOVbarC *F,int i,Buffer_liste buf);
 
-void ouvrire_LOVbarC(LOVbarC *F,char nom[],char mode);
+void Lire_Dir_LOVbarC(LOVbarC F,int i,Buffer_liste *buf);
+void ouvrire_LOVbarC(LOVbarC *F,char nom[20],char mode);
 
 void Fermer_LOVbarC(LOVbarC *F);
-void Alloc_Bloc(LOVbarC *F);//en ajoute un bloc vide a la derniere position
-
+void Alloc_Bloc(LOVbarC *F);
+//=============Macihne abstraite TOVC================================
+void Aff_Entete_TOVC( TOVC *F,int i,int val);
+int entete_TOVC(TOVC F,int i);
+void Ecrire_Dir_TOVC(TOVC *F,int i,Buffer buf);
+void Lire_Dir_TOVC(TOVC F,int i,Buffer *buf);
+void ouvrire_TOVC(TOVC *F,char nom[20],char mode);
+//==============Fonctions du TP=======================================
+void cree_livre(LOVbarC F , TOVC * F2);
+void affichage_TOVC(TOVC F);
+void Fermer_TOVC(TOVC *F);
+void majuscule(char nom[20]);
 //========debugging stuff=======================
 void affichage_entete(LOVbarC F);
-
-void affichage_bloc(LOVbarC F,int *i);//affichier un seul bloc
-    ;
-
-void affichage_bParB(LOVbarC F);//affichage bloc par bloc meme si il eté supprimer logiquement
+void affichage_bloc(LOVbarC F,int *k);
+void affichage_bParB(LOVbarC F);
 
 //hadi ntesti biha
 void ecrire_chaine(LOVbarC *F,int i,char s[b]);
-
 void insertion_nonO(LOVbarC *F,char chaine[b]);
+void aleat_chaine(char *nom[50],int taille);
+void aleat_resum(char *nom[50],int min , int max);
+void aleat_type(char *chaine[24]);
+void aleat_anne(char *chaine[4]);
+void int_to_char(int num , char * chain[4]);
+void aleat_disponible(char *dispo[1]);
 
-
+//char Type [4][25]={"Texte imprime","Document electronique","Article","Periodique"};
+void Cree_Ouvrage(LOVbarC *F);
+void recherche (LOVbarC *F ,int clee, int *bloc, int *pos , int *trouv);
+void insertion(LOVbarC *F );
+void modif_dispo(LOVbarC *F ,int clee , char *nv_etat[1]);
 #endif // FONCTIONS_H_INCLUDED
