@@ -3,6 +3,19 @@
 #include <string.h>
 #include "Fonctions.h"
 
+void Cree_Livre2(LOVbarC Fo){//Fo: fichier ouvrage
+    if (Fo.file!=NULL){
+        Buffer tbuf;
+        Buffer_liste buf;
+        TOVC F;
+        ouvrire_TOVC(&F,"livres.bin",'n');
+
+    }
+
+}
+
+
+
 
 
 void affichage_bloc2(LOVbarC F,int *i){//affichier un seul bloc
@@ -19,12 +32,11 @@ void affichage_bparb2(LOVbarC F){
 }
 
 int main(){
-TOVC F;
-ouvrire_TOVC(&F,"not.bin",'n');
-Buffer buf;
-sprintf(buf.chaine,"hello world");
-Ecrire_Dir_TOVC(&F,1,buf);
-printf("%s",buf.chaine);
-Fermer_TOVC(&F);
+LOVbarC F;
+Cree_Ouvrage(&F);
+ouvrire_LOVbarC(&F,"ouvrage.bin",'a');
+affichage_entete(F);
+affichage_bparb2(F);
+
 return 0;
 }

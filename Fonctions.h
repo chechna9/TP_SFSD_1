@@ -101,11 +101,10 @@ void int_to_char(int num , char * chain[4]);
 void aleat_disponible(char *dispo[1]);
 
 //char Type [4][25]={"Texte imprime","Document electronique","Article","Periodique"};
-void Cree_Ouvrage(LOVbarC *F);
 void alea_chaine(char chaine[],int max,int min); //sup ou egale a min et strictement inf a max
 
 void remplir_ouvrage(char ouvrage[b],int cle);
-void Cree_Ouvrage2(LOVbarC *F);
+void Cree_Ouvrage(LOVbarC *F);
 void recherche (LOVbarC *F ,int clee, int *bloc, int *pos , int *trouv);
 void insertion(LOVbarC *F );
 void modif_dispo(LOVbarC *F ,int clee , char *nv_etat[1]);
