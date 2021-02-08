@@ -450,16 +450,16 @@ char type[24];
    }
    sprintf(chaine,"%s",type);
 }
-void aleat_anne(char *chaine[4])
+void aleat_anne(char chaine[5])
 {int n ;
   n=rand()%72+1950;
-  sprintf(chaine,"%d",n);
-  printf("chaine =%s\n",chaine);
+
+  int_to_char(n,chaine);
 
 }
-void int_to_char(int num , char * chain[4])
- {char chaine[10]="0123456789";
- char chaine2[4]="0000";
+void int_to_char(int num ,char chain[5])
+ {char chaine[11]="0123456789";
+ char chaine2[5]="0000";
  int i ,n;
  for(i=3;i!=-1;i--)
  {n=num%10;
@@ -469,7 +469,7 @@ num=num/10;
 chaine2[4]='\0';
  sprintf(chain,"%s",chaine2);
 }
-void aleat_disponible(char *dispo[1])
+void aleat_disponible(char *dispo[2])
 {
     int a;
     a=(int) rand()%2;
@@ -495,38 +495,37 @@ void alea_chaine(char chaine[],int max,int min){ //sup ou egale a min et stricte
 }
 void remplir_ouvrage(char ouvrage[b],int cle){
             strcpy(ouvrage,"");
-            //insertion de la cle
-            char cle_char[4];
+            //generation de la cle
+            char cle_char[5];
             int_to_char(cle,cle_char);
-            sprintf(ouvrage,"%s%s",ouvrage,cle_char);
 
-            //insertion du titre
-            char titre[20];
-            alea_chaine(titre,20,3);
-            sprintf(ouvrage,"%s%s",ouvrage,titre);
+            //generation du titre
+            char titre[20];//de 19 caractere
+            alea_chaine(titre,20,19);//de 19 caractere
 
-            //insertion du auteur
+            //generation du auteur
             char auteur[20];
-            alea_chaine(auteur,20,3);
-            sprintf(ouvrage,"%s%s",ouvrage,auteur);
+            alea_chaine(auteur,20,19);//de 19 caractere
 
-            //insertion du type
+            //generation du type
             char type[24];
             aleat_type(type);
-            sprintf(ouvrage,"%s%s",ouvrage,type);
 
-            //insertion du champ disponible
-            char disp[1];
+            //generation du l anne
+            char anne_char[5];
+            aleat_anne(anne_char);
+
+            //generation du champ disponible
+            char disp[2];
             aleat_disponible(disp);
-            sprintf(ouvrage,"%s%s",ouvrage,disp);
 
-            //insertion du la cote (la meme que la cle)
-            sprintf(ouvrage,"%s%s",ouvrage,cle_char);
+            //generation du la cote (la meme que la cle)
 
-            //insertion du reume
+            //generation du reume
             char resume[50];
             alea_chaine(resume,15,10);
-            sprintf(ouvrage,"%s%s",ouvrage,resume);
+
+            sprintf(ouvrage,"%s%s%s%s%s%s%s%s",cle_char,titre,auteur,type,anne_char,disp,cle_char,resume);
 
 
 

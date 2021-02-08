@@ -96,9 +96,9 @@ void insertion_nonO(LOVbarC *F,char chaine[b]);
 void aleat_chaine(char *nom[50],int taille);
 void aleat_resum(char *nom[50],int min , int max);
 void aleat_type(char *chaine[24]);
-void aleat_anne(char *chaine[4]);
-void int_to_char(int num , char * chain[4]);
-void aleat_disponible(char *dispo[1]);
+void aleat_anne(char chaine[5]);
+void int_to_char(int num , char chain[5]);
+void aleat_disponible(char *dispo[2]);
 
 //char Type [4][25]={"Texte imprime","Document electronique","Article","Periodique"};
 void alea_chaine(char chaine[],int max,int min); //sup ou egale a min et strictement inf a max
