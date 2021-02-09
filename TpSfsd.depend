@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1612746463 source:c:\users\mon pc\desktop\tp sfsd\tpsfsd\fonctions.c
+1612797388 source:c:\users\mon pc\desktop\tp sfsd\tpsfsd\fonctions.c
 	"Fonctions.h"
 
 1612746370 c:\users\mon pc\desktop\tp sfsd\tpsfsd\fonctions.h
@@ -7,7 +7,7 @@
 	<stdlib.h>
 	<string.h>
 
-1612747080 source:c:\users\mon pc\desktop\tp sfsd\tpsfsd\main.c
+1612797270 source:c:\users\mon pc\desktop\tp sfsd\tpsfsd\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
