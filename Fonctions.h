@@ -4,8 +4,47 @@
 #include <stdlib.h>
 #include <string.h>
 #define b 400
-#define t 12
+#define t 12//taille de l auteur et titre - 1
 #define Taille_Bloc 100
+#define Taille_Bloc_TOF 10
+
+//======= LOVC ==================================================================
+typedef struct LOVCbloc{
+    char tab[b];//tableau de caractere
+    int suiv;//numero du bloc suivant
+} LOVCbloc;
+typedef struct LOVCbloc Buffer_LOVC;//declaration du Buffer_liste
+typedef struct Entete_LOVC{
+    int tete;//adresse du premier bloc
+    int nbInsert;//nombre globale des caracteres inserer
+    int nbSupp;//nombre globale des caractere supprimer
+    int nb_bloc;//nombre de bloc
+}Entete_LOVC;
+typedef struct Fichier_LOVC {
+    Entete_LOVC entete;
+    FILE *file;
+}LOVC;
+//=============TOF===============================================================
+typedef struct enregistrement  {
+char cle[5];
+char titre[t];
+char auteurs[t];
+char anne_pub[5];
+char dispo[2];
+} enregistrement ;
+typedef struct TOF_Bloc{
+enregistrement tab[Taille_Bloc_TOF];
+int nb_enreg_inserer;
+}TOF_Bloc;
+typedef struct Entete_TOF{
+int nb_bloc;
+int dernier_pos;
+} Entete_TOF;
+
+typedef struct Fichier_TOF {
+    Entete_TOF entete;
+    FILE *fichier;
+}TOF;
 //=======LOVbarC=================================================================
 //=======Declarations des structures===========================================
 typedef struct Lbloc{
@@ -71,17 +110,41 @@ void Lire_Dir_LOVbarC(LOVbarC F,int i,Buffer_liste *buf);
 void ouvrire_LOVbarC(LOVbarC *F,char nom[20],char mode);
 
 void Fermer_LOVbarC(LOVbarC *F);
-void Alloc_Bloc(LOVbarC *F);
+void Alloc_Bloc(LOVbarC *F,int dernier_bloc);
 //=============Macihne abstraite TOVC================================
 void Aff_Entete_TOVC( TOVC *F,int i,int val);
 int entete_TOVC(TOVC F,int i);
-void Ecrire_Dir_TOVC(TOVC *F,int i,Buffer buf);
+void Ecrire_Dir_TOVC(TOVC *F,int i,Buffer *buf);
 void Lire_Dir_TOVC(TOVC F,int i,Buffer *buf);
 void ouvrire_TOVC(TOVC *F,char nom[20],char mode);
 void Fermer_TOVC(TOVC *F);
 void Alloc_Bloc_TOVC(TOVC *F);
+///==================== Machine abstraite TOF=================================================================
+void fermer_TOF(TOF *F);
+void Aff_Entete_TOF(TOF *F,int i,int val);
+int entete_TOF(TOF F,int i);
+void Ecrire_Dir_TOF(TOF *F,int i,TOF_Bloc buf);
+void Lire_Dir_TOF(TOF F,int i,TOF_Bloc *buf);
+void ouvrire_TOF(TOF *F,char nom[20],char mode);
+void Alloc_bloc_TOF(TOF *F );
+///===================================================LOVC================================================================
+void Aff_Entete_LOVC(LOVC *F,int i,int val);
+int entete_LOVC(LOVC F,int i);
+void Ecrire_Dir_LOVC(LOVC *F,int i,Buffer_LOVC buf);
+
+void Lire_Dir_LOVC(LOVC F,int i,Buffer_LOVC *buf);
+void ouvrire_LOVC(LOVC *F,char nom[20],char mode);
+
+void Fermer_LOVC(LOVC *F);
+void Alloc_Bloc_LOVC(LOVC *F,int dernier_Bloc);
+void creer_memoire(LOVbarC Fo);
+
+void affichage_Memoire(LOVC F);
+
 //==============Fonctions du TP=======================================
-void cree_livre(LOVbarC F , TOVC * F2);
+void del_type(char ouvrage[b]);//fonction qui supprime le type
+void Cree_Livre(LOVbarC Fo);//Fo: fichier ouvrage
+
 void affichage_TOVC(TOVC F);
 
 void majuscule(char nom[20]);
@@ -93,19 +156,35 @@ void affichage_bParB(LOVbarC F);
 //hadi ntesti biha
 void ecrire_chaine(LOVbarC *F,int i,char s[b]);
 void insertion_nonO(LOVbarC *F,char chaine[b]);
-void aleat_chaine(char *nom[50],int taille);
-void aleat_resum(char *nom[50],int min , int max);
+void aleat_chaine(char chaine[50],int taille);
+void aleat_resum(char chaine[50],int min , int max);
 void aleat_type(char *chaine[24]);
 void aleat_anne(char chaine[5]);
 void int_to_char(int num , char chain[5]);
 void aleat_disponible(char *dispo[2]);
 
-//char Type [4][25]={"Texte imprime","Document electronique","Article","Periodique"};
+int detectType(char ouvrage[b]);
+
 void alea_chaine(char chaine[],int max,int min); //sup ou egale a min et strictement inf a max
 
 void remplir_ouvrage(char ouvrage[b],int cle);
 void Cree_Ouvrage(LOVbarC *F);
 void recherche (LOVbarC *F ,int clee, int *bloc, int *pos , int *trouv);
 void insertion(LOVbarC *F );
-void modif_dispo(LOVbarC *F ,int clee , char *nv_etat[1]);
+void modif_dispo(LOVbarC *F ,int clee , char nv_etat);
+///=================================================================
+void del_type_cote(char ouvrage[b]);
+void Cree_Article(LOVbarC Fo);
+void affichage_bloc2(LOVbarC F,int *i);
+void affichage_bparb2(LOVbarC F);
+void affiche_livre(TOVC F);
+void recuperer_chaine(LOVbarC *F,int n, int *i, int *j, char chaine[],Buffer_liste *buf);
+void remplir_livre(TOVC *F , int *bloc , int *pos , char ouvrage[] ,Buffer * buf );
+void remplir_memoire(LOVC *F ,char ouvragee[b] ,int * bloc ,int *pos , Buffer_LOVC *buf );
+void remplir_articl(TOVC *F , int *bloc , int * pos , char ouvrage[] , Tbloc *buf );
+void remplir_periodique(TOF *F , int *bloc ,int *pos,TOF_Bloc *buf ,enregistrement enrg);
+void cree_fichier(LOVbarC F);
+void Affichage_TOF(TOF F);
+void remplir_enreg(char ouvrage[b],enregistrement *enr);
+void affiche_enreg(enregistrement enr);
 #endif // FONCTIONS_H_INCLUDED
